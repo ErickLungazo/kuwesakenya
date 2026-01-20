@@ -1,0 +1,249 @@
+import React, { useState } from "react";
+import { base44 } from "@/api/base44Client";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Phone, Mail, MapPin, Globe } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
+
+export default function Contact() {
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: ""
+  });
+
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      // Send email to Kuwesa
+      await base44.integrations.Core.SendEmail({
+        from_name: "Kuwesa Website",
+        to: "kuwesakenya@gmail.com",
+        subject: `Contact Form: ${formData.subject}`,
+        body: `
+New message from Kuwesa website:
+
+Name: ${formData.name}
+Email: ${formData.email}
+Subject: ${formData.subject}
+
+Message:
+${formData.message}
+        `
+      });
+
+      // Send confirmation to user
+      await base44.integrations.Core.SendEmail({
+        from_name: "Kuwesa",
+        to: formData.email,
+        subject: "We Received Your Message",
+        body: `
+Dear ${formData.name},
+
+Thank you for contacting Kuwesa! We have received your message and will respond as soon as possible.
+
+Your message:
+${formData.message}
+
+Best regards,
+The Kuwesa Team
+
+P.O BOX 5, KAIMOSI, KENYA
+Phone: 011-254-727 640 569
+Email: kuwesakenya@gmail.com
+Website: www.kuwesakenya.com
+        `
+      });
+
+      toast({
+        title: "Message sent successfully!",
+        description: "We'll get back to you as soon as possible.",
+      });
+
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        message: ""
+      });
+    } catch (error) {
+      toast({
+        title: "Error sending message",
+        description: "Please try again or contact us directly via email.",
+        variant: "destructive",
+      });
+    }
+
+    setIsSubmitting(false);
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero */}
+      <section className="relative py-20 px-4" style={{ background: 'linear-gradient(135deg, #2d8659 0%, #1f5d3f 100%)' }}>
+        <div className="max-w-4xl mx-auto text-center text-white">
+          <h1 className="text-5xl font-bold mb-6">Get in Touch</h1>
+          <p className="text-xl text-green-100">
+            Have questions? We'd love to hear from you
+          </p>
+        </div>
+      </section>
+
+      {/* Contact Information */}
+      <section className="py-16 px-4 -mt-12">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-6 mb-12">
+            {/* Kenya Office */}
+            <Card className="shadow-lg">
+              <CardHeader className="bg-gradient-to-r from-green-600 to-green-700 text-white">
+                <CardTitle className="flex items-center gap-2">
+                  <MapPin className="w-5 h-5" />
+                  Kenya Office
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 space-y-4">
+                <div className="flex items-start gap-3">
+                  <MapPin className="w-5 h-5 text-green-600 mt-1 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium text-gray-900">Primary Business Address</p>
+                    <p className="text-gray-600">P.O BOX 5, - (50309)</p>
+                    <p className="text-gray-600">KAIMOSI, KENYA</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Phone className="w-5 h-5 text-green-600 mt-1 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium text-gray-900">Phone</p>
+                    <p className="text-gray-600">011-254-727 640 569</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Mail className="w-5 h-5 text-green-600 mt-1 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium text-gray-900">Email</p>
+                    <a href="mailto:kuwesakenya@gmail.com" className="text-green-600 hover:underline">
+                      kuwesakenya@gmail.com
+                    </a>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Globe className="w-5 h-5 text-green-600 mt-1 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium text-gray-900">Website</p>
+                    <a href="http://www.kuwesakenya.com" target="_blank" rel="noopener noreferrer" className="text-green-600 hover:underline">
+                      www.kuwesakenya.com
+                    </a>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* USA Office */}
+            <Card className="shadow-lg">
+              <CardHeader className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-gray-900">
+                <CardTitle className="flex items-center gap-2">
+                  <MapPin className="w-5 h-5" />
+                  USA Office
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-6 space-y-4">
+                <div className="flex items-start gap-3">
+                  <MapPin className="w-5 h-5 text-yellow-600 mt-1 flex-shrink-0" />
+                  <div>
+                    <p className="font-medium text-gray-900">Mailing Address</p>
+                    <p className="text-gray-600">Kuwesa</p>
+                    <p className="text-gray-600">17 Palm Court</p>
+                    <p className="text-gray-600">Brooklyn, New York 11225</p>
+                  </div>
+                </div>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
+                  <p className="text-sm text-blue-900">
+                    <strong>Tax Information:</strong> Kuwesa is a United States 501(c)(3) Organization and a Kenyan Community Based Organization
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Contact Form */}
+          <Card className="shadow-lg max-w-3xl mx-auto">
+            <CardHeader>
+              <CardTitle className="text-2xl">Send Us a Message</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <Label htmlFor="name">Your Name *</Label>
+                    <Input
+                      id="name"
+                      required
+                      value={formData.name}
+                      onChange={(e) => handleInputChange('name', e.target.value)}
+                      placeholder="John Doe"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="email">Your Email *</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={(e) => handleInputChange('email', e.target.value)}
+                      placeholder="john@example.com"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="subject">Subject *</Label>
+                  <Input
+                    id="subject"
+                    required
+                    value={formData.subject}
+                    onChange={(e) => handleInputChange('subject', e.target.value)}
+                    placeholder="How can we help you?"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="message">Message *</Label>
+                  <Textarea
+                    id="message"
+                    required
+                    value={formData.message}
+                    onChange={(e) => handleInputChange('message', e.target.value)}
+                    placeholder="Tell us more..."
+                    rows={6}
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  className="w-full bg-green-600 hover:bg-green-700 py-6 text-lg"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Sending..." : "Send Message"}
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+    </div>
+  );
+}

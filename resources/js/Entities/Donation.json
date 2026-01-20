@@ -1,0 +1,51 @@
+{
+  "name": "Donation",
+  "type": "object",
+  "properties": {
+    "donor_name": {
+      "type": "string",
+      "description": "Donor name"
+    },
+    "donor_email": {
+      "type": "string",
+      "description": "Donor email"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Donation amount in USD"
+    },
+    "message": {
+      "type": "string",
+      "description": "Optional message from donor"
+    },
+    "donation_type": {
+      "type": "string",
+      "enum": [
+        "water_project",
+        "general",
+        "bio_sand_filter",
+        "spring_protection"
+      ],
+      "default": "general"
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "completed",
+        "failed"
+      ],
+      "default": "pending"
+    },
+    "anonymous": {
+      "type": "boolean",
+      "description": "Anonymous donation",
+      "default": false
+    }
+  },
+  "required": [
+    "donor_name",
+    "donor_email",
+    "amount"
+  ]
+}

@@ -1,0 +1,46 @@
+# Environment
+.env
+.env.*
+*.log
+
+# Laravel
+/vendor
+/node_modules
+/public/build
+/public/hot
+/public/storage
+
+/storage/*.key
+/storage/app/*
+!/storage/app/.gitignore
+/storage/framework/*
+!/storage/framework/.gitignore
+/storage/framework/cache/*
+!/storage/framework/cache/.gitignore
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+/storage/logs/*
+
+# Caches
+.phpunit.result.cache
+.phpunit.cache
+.phpactor.json
+
+# IDEs & OS
+/.idea
+/.vscode
+/.fleet
+/.nova
+/.zed
+.DS_Store
+Thumbs.db
+
+# Tools
+/auth.json
+Homestead.json
+Homestead.yaml
+
+# Archives
+*.zip
